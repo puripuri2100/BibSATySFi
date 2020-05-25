@@ -1,0 +1,20 @@
+name: CI
+
+on: [push,pull_request]
+
+jobs:
+  run:
+    name: Build
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [macos-latest, ubuntu-latest]
+        ocaml-version: [ '4.09.0', '4.10.0']
+    steps:
+    - uses: actions/checkout@master
+    - uses: avsm/setup-ocaml@master
+      with:
+        ocaml-version: ${{ matrix.ocaml-version }}
+    - run: opam pin add bibsatysfi.dev -n .
+    - run: opam depext -yt bibsatsyfi
+    - run: opam install -t .
