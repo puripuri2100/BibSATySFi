@@ -1,0 +1,17 @@
+_build
+t
+bibsatysfi
+.merlin
+
+satysfi
+readAux.ml
+range.ml
+bnf
+
+test.bib
+test.satyh
+
+*.saty
+*.pdf
+*.satysfi-aux
+

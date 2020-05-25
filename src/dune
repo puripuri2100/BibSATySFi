@@ -1,0 +1,16 @@
+(executable
+  (name main)
+  (public_name bibsatysfi)
+  (flags (-w -3 -bin-annot -thread -safe-string))
+  (libraries  yojson
+              str
+  )
+)
+
+(ocamllex
+  (modules lex lex_author)
+)
+
+(menhir
+  (modules parse parse_author)
+)
