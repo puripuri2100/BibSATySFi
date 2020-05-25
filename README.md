@@ -42,7 +42,7 @@ opam init --comp 4.10.0 --disable-sandboxing
 
 ```sh
 git clone https://github.com/puripuri2100/BibSATySFi.git
-cd xml2saty
+cd BibSATySFi
 
 opam pin add bibsatysfi .
 opam install bibsatysfi
