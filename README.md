@@ -55,6 +55,33 @@ Required package
 
 - [BiByFi](https://github.com/namachan10777/BiByFi)
 
+All the `{}` used to represent the value in the bib file need to be replaced with `""`.
+
+ex.
+
+old bib file
+
+```
+@Book{rust2019,
+  author = {κeen, 河野達也 and 小松礼人},
+  title = {実践Rust入門},
+  publisher = {技術評論社},
+  year = {2019}
+}
+```
+
+new bib file
+
+```
+@Book{"rust2019",
+  author = "κeen, 河野達也 and 小松礼人",
+  title = "実践Rust入門",
+  publisher = "技術評論社",
+  year = 2019
+}
+```
+
+
 Type
 
 ```sh
