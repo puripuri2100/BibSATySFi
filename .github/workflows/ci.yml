@@ -16,5 +16,5 @@ jobs:
       with:
         ocaml-version: ${{ matrix.ocaml-version }}
     - run: opam pin add bibsatysfi.dev -n .
-    - run: opam depext -yt bibsatsyfi
+    - run: opam depext -yt bibsatysfi
     - run: opam install -t .
