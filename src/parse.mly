@@ -9,6 +9,7 @@
 %token LCurlyBraces
 %token RCurlyBraces
 
+%token <string>Var
 %token <string>Str1
 %token <string>Str2
 %token <int>Int1
@@ -126,6 +127,7 @@ data_title:
   | URL          {URL}
   | Volume       {Volume}
   | Year         {Year}
+  | Var          {TitleVar($1)}
 
 name :
   | Str1 {$1}

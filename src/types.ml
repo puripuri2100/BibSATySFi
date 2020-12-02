@@ -49,6 +49,7 @@ type data_title_type =
   | URL
   | Volume
   | Year
+  | TitleVar of string
 
 type data_type =
   | Name of string

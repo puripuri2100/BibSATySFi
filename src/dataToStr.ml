@@ -32,6 +32,7 @@ let title_to_str t =
   | URL          -> "URL"
   | Volume       -> "Volume"
   | Year         -> "Year"
+  | TitleVar(s)  -> s
 
 
 let entry_str t =

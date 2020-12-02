@@ -83,7 +83,7 @@ rule lex = parse
     | "url"           -> URL
     | "volume"        -> Volume
     | "year"          -> Year
-    | _               -> raise (UnidentifiedToken(tokstr))
+    | _               -> Var(tokstr)
   }
   | digit+ {
     let tok = Lexing.lexeme lexbuf in
