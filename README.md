@@ -85,7 +85,7 @@ new bib file
 Type
 
 ```sh
-xml2saty <input file> -o <output file>
+bibsatysfi <input file> -o <output file>
 ```
 
 ---
