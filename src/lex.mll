@@ -12,12 +12,13 @@ let capital = ['A'-'Z']
 let small = ['a'-'z']
 let latin = (capital | small)
 let identifier = latin+
-let str = [^ ',' '"' '{' '}' '@' '=']
+let str = [^ ',' '"' '{' '}' '@' '=' '%']
 
 
 rule lex = parse
   | space { lex lexbuf }
   | break { Lexing.new_line lexbuf; lex lexbuf }
+  | "%%" {comment lexbuf; lex lexbuf}
   | latin+ {
     let tokstr = Lexing.lexeme lexbuf in
     match tokstr with
@@ -109,3 +110,9 @@ and make_string strbuf = parse
   | "\""   { Buffer.contents strbuf }
   | eof    { raise SeeEndOfFileInStringLiteral }
   | _ as c { Buffer.add_char strbuf c; make_string strbuf lexbuf }
+
+
+and comment = parse
+  | break { Lexing.new_line lexbuf }
+  | eof   { () }
+  | _     { comment lexbuf }
