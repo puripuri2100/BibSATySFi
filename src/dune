@@ -2,15 +2,20 @@
   (name main)
   (public_name bibsatysfi)
   (flags (-w -3 -bin-annot -thread -safe-string))
-  (libraries  yojson
+  (libraries  menhirLib
+              sedlex
               str
   )
+  (preprocess
+            (pps
+              ppx_deriving.show
+              sedlex.ppx
+            ))
 )
 
-(ocamllex
-  (modules lex lex_author)
-)
 
 (menhir
-  (modules parse parse_author)
-)
+  (modules parser)
+  (flags (--table --explain)))
+
+ 

@@ -8,14 +8,15 @@ Convert Bib file to SATySFis document file
 """
 license: "MIT"
 tags: []
-homepage: "https://github.com/puripuri2100/bib2saty"
-doc: "https://github.com/puripuri2100/bib2saty/doc"
-bug-reports: "https://github.com/puripuri2100/bib2saty/issues"
+homepage: "https://github.com/puripuri2100/BibSATySFi"
+doc: "https://github.com/puripuri2100/BibSATySFi/tree/master/doc"
+bug-reports: "https://github.com/puripuri2100/BibSATySFi/issues"
 depends: [
-  "ocaml" {>= "4.06.0"}
+  "ocaml" {>= "4.08"}
+  "sedlex" {>= "3.0" & < "4.0"}
   "menhir"
   "dune"
-  "yojson"
+  "ppx_deriving" {>= "5.0" & < "6.0"}
 ]
 build: [
   [make "-f" "Makefile" "build" "PREFIX=%{prefix}%"]
@@ -23,4 +24,4 @@ build: [
 install: [
   [make "-f" "Makefile" "install" "PREFIX=%{prefix}%"]
 ]
-dev-repo: "git+https://github.com/puripuri2100/bib2saty.git"
+dev-repo: "git+https://github.com/puripuri2100/BibSATySFi.git"

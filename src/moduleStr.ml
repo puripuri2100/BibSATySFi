@@ -17,10 +17,11 @@ module "^module_name^" :sig
 
 end = struct
 
-let bibs =
+let bibs = [
 "
 ^str^
 "
+]
 
 end
 
