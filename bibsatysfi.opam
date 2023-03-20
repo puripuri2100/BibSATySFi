@@ -1,5 +1,5 @@
 opam-version: "2.0"
-version: "0.1.0"
+version: "0.2.0"
 maintainer: "puripuri2100"
 authors: ["puripuri2100"]
 synopsis: "Convert Bib file to SATySFi's document file"

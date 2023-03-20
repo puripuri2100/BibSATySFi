@@ -26,7 +26,7 @@ let parse lexbuf =
 
 
 let arg_version () =
-  print_string "bibsaty version 0.1.0\n";
+  print_string "bibsatysfi version 0.2.0\n";
   exit 0
 
 

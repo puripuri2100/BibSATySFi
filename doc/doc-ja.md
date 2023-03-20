@@ -1,4 +1,4 @@
-bibsatysfi v0.1.0
+bibsatysfi v0.2.0
 
 このソフトウェアはbibファイルを、SATySFiのパッケージの1つである[BiByFi](https://github.com/namachan10777/BiByFi)で処理できるデータ構造に書き換えるものです。
 
