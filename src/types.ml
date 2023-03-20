@@ -1,59 +1,35 @@
+type cite_key = string
 
-type value_type =
-  | ValueString of string
-  | ValueInt of int
+
+type value =
+  | Text of string
+  | RawText of string
+  | Int of int
+  | DefText of string
 
 
 type entry_type =
   | Article
   | Book
-  | BookLet
+  | Booklet
   | Conference
   | InBook
-  | Incollection
-  | Inproceedings
+  | InCollection
+  | InProceedings
   | Manual
-  | Mastersthesis
+  | MastersThesis
   | Misc
   | Online
-  | Phdthesis
+  | PhDThesis
   | Proceedings
-  | Techreport
-  | Unpublished
-
-type data_title_type =
-  | Address
-  | Annote
-  | Author
-  | BookTitle
-  | CrossRef
-  | Chapter
-  | Edition
-  | Editor
-  | Eprint
-  | HowPublished
-  | Institution
-  | ISBN
-  | Journal
-  | Key
-  | Month
-  | Note
-  | Number
-  | Organization
-  | Pages
-  | Publisher
-  | School
-  | Series
-  | Title
-  | Type
-  | URL
-  | Volume
-  | Year
-  | TitleVar of string
-
-type data_type =
-  | Name of string
-  | Value of data_title_type * value_type
+  | TechReport
+  | UnPublished
+  | OtherEntry of string
 
 
-type term = (entry_type * (data_type list)) list
+type bib = {
+  entry_type : entry_type;
+  cite : cite_key;
+  entry_lst : (string, (value list)) Hashtbl.t;
+}
+

@@ -3,16 +3,30 @@ open Lexing
 open Filename
 
 open OptionState
-open Parse
-open Lex
+open Parser
+open Lexer
 open Types
 open Error
-open MakeStr
-(*open ReadAux*)
 open ModuleStr
 
+
+let parse lexbuf =
+  let () = is_entry_mode := false in
+  let lexer () =
+    let (ante_position, post_position) =
+      Sedlexing.lexing_positions lexbuf
+    in
+    let token = Lexer.lex lexbuf in
+    (token, ante_position, post_position)
+  in
+  let parser =
+    MenhirLib.Convert.Simplified.traditional2revised Parser.parse
+  in
+  parser lexer
+
+
 let arg_version () =
-  print_string "bib2saty version 0.1.0\n";
+  print_string "bibsaty version 0.1.0\n";
   exit 0
 
 
@@ -36,16 +50,6 @@ let arg_output curdir s =
   OptionState.set_output_file path
 
 
-let arg_aux curdir s =
-  let path =
-    if Filename.is_relative s then
-      Filename.concat curdir s
-    else
-      s
-  in
-  OptionState.set_aux_file path
-
-
 let arg_module_name s =
   OptionState.set_module_name s
 
@@ -62,20 +66,18 @@ let arg_import_package str =
 
 let arg_spec curdir =
   [
-    ("-v",        Arg.Unit(arg_version)  , "Prints version");
-    ("--version", Arg.Unit(arg_version)  , "Prints version");
-    ("-f",     Arg.String (arg_input curdir), "Specify Bib file");
-    ("--file", Arg.String (arg_input curdir), "Specify Bib file");
-    ("-o",       Arg.String (arg_output curdir),  "Specify output file");
-    ("--output", Arg.String (arg_output curdir), "Specify output file");
-    ("-a",    Arg.String (arg_aux curdir),  "Specify AUX file");
-(*    ("--aux", Arg.String (arg_aux curdir), "Specify AUX file");*)
-    ("--module-name", Arg.String (arg_module_name), "Specify Module name");
+    ("-v",                 Arg.Unit(arg_version),            "Prints version");
+    ("--version",          Arg.Unit(arg_version),            "Prints version");
+    ("-f",                 Arg.String (arg_input curdir),    "Specify Bib file");
+    ("--file",             Arg.String (arg_input curdir),    "Specify Bib file");
+    ("-o",                 Arg.String (arg_output curdir),   "Specify output file");
+    ("--output",           Arg.String (arg_output curdir),   "Specify output file");
+    ("--module-name",      Arg.String (arg_module_name),     "Specify Module name");
     ("--require-packages", Arg.String (arg_require_package), "Specify `@require` package");
-    ("--import-packages", Arg.String (arg_import_package), "Specify `@import` package");
+    ("--import-packages",  Arg.String (arg_import_package),  "Specify `@import` package");
   ]
 
- 
+
 let main =
   Error.error_msg (fun () ->
     let curdir = Sys.getcwd () in
@@ -93,26 +95,20 @@ let main =
     let output_file_path =
       match OptionState.output_file () with
       | Some(v) -> v
-      | None -> basename ^ ".satyh"
+      | None -> basename ^ ".satyg"
     in
-    let bib_data_list =
-      open_in input_file_path |> Lexing.from_channel |> Parse.parse Lex.lex
+    let (bib_data, def_value_lst) =
+      input_file_path |> open_in |> Sedlexing.Utf8.from_channel |> parse
     in
-(*
-    let aux_data_lst_opt =
-      match OptionState.aux_file () with
-      | None -> None
-      | Some(s) -> Some(s |> ReadAux.key_lst |> ReadAux.value_lst)
-    in
-*)
     let module_name =
       match OptionState.module_name () with
       | None -> "Bib"
       | Some(s) -> s
     in
     let package_lst = (OptionState.require_package_lst (), OptionState.import_package_lst ()) in
-    let body_str = MakeStr.make_main_str bib_data_list None in
-    let main_str = ModuleStr.make_module_str package_lst module_name body_str in
+    let body_str_buf = Buffer.create 512 in
+    let () = Hashtbl.iter (MakeStr.to_str body_str_buf def_value_lst) bib_data in
+    let main_str = ModuleStr.make_module_str package_lst module_name (Buffer.contents body_str_buf) in
     let open_channel = open_out output_file_path in
     let () = Printf.fprintf open_channel "%s" main_str in
     let () = close_out open_channel in
