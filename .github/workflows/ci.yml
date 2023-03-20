@@ -1,20 +1,26 @@
 name: CI
 
-on: [push,pull_request]
+on: [push, pull_request]
 
 jobs:
-  run:
-    name: Build
-    runs-on: ${{ matrix.operating-system }}
+  build:
     strategy:
+      fail-fast: false
       matrix:
-        operating-system: [macos-latest, ubuntu-latest]
-        ocaml-version: [ '4.09.0', '4.10.0']
+        os:
+          - ubuntu-latest
+        ocaml-compiler:
+          - "4.10.0"
+          - "4.14.0"
+
+    runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@master
-    - uses: avsm/setup-ocaml@master
-      with:
-        ocaml-version: ${{ matrix.ocaml-version }}
-    - run: opam pin add bibsatysfi.dev -n .
-    - run: opam depext -yt bibsatysfi
-    - run: opam install -t .
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use OCaml ${{ matrix.ocaml-compiler }}
+        uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-compiler: ${{ matrix.ocaml-compiler }}
+
+      - run: opam install . --deps-only --with-test
